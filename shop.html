@@ -43,14 +43,18 @@
                     <p class="eyebrow">Community lobby</p>
                     <h2>Game chat rooms</h2>
                 </div>
-                <span class="chat-online-label">120 online</span>
+                <span class="chat-online-label" id="online-counter">Lobby loading...</span>
             </div>
             <div class="chat-layout">
-                <aside class="chat-rooms" id="chat-rooms"></aside>
+                <aside class="chat-rooms" id="chat-rooms">
+                    <button class="chat-room-bar active" data-room="General"># General</button>
+                    <button class="chat-room-bar" data-room="LFG"># Looking-For-Group</button>
+                    <button class="chat-room-bar" data-room="Trading"># Market-Trading</button>
+                </aside>
                 <div class="chat-feed-wrap">
                     <div class="chat-feed" id="chat-feed"></div>
                     <form class="chat-composer" id="chat-form">
-                        <input id="chat-input" type="text" placeholder="Message the lobby..." maxlength="180">
+                        <input id="chat-input" type="text" placeholder="Message the lobby..." maxlength="180" autocomplete="off">
                         <button class="btn btn-primary" type="submit">Send</button>
                     </form>
                 </div>
@@ -99,5 +103,106 @@
     </footer>
 
     <script src="script.js"></script>
+
+    <!-- 🌐 Live Real-Time Unified WebSocket Engine Integration -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Handles dynamic socket targeting relative to your current host environment
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        const SERVER_URL = `${protocol}//${window.location.host}`;
+        
+        let socket;
+        let activeRoom = "General";
+        
+        // Dynamic User Tracking: Pulls their customized Supabase database tag or builds a clean visitor fallback
+        let currentUsername = localStorage.getItem("pixel_forge_username") || "Guest_" + Math.floor(Math.random() * 1000);
+
+        const chatFeed = document.getElementById("chat-feed");
+        const chatForm = document.getElementById("chat-form");
+        const chatInput = document.getElementById("chat-input");
+        const roomButtons = document.querySelectorAll(".chat-room-bar");
+        const counterLabel = document.getElementById("online-counter");
+
+        const logSystemMessage = (text) => {
+            const notice = document.createElement("div");
+            notice.className = "chat-message";
+            notice.style.borderColor = "rgba(255, 255, 255, 0.04)";
+            notice.style.background = "rgba(255, 255, 255, 0.02)";
+            notice.innerHTML = `<em style="color: #666; font-size: 0.9rem;">${text}</em>`;
+            chatFeed?.appendChild(notice);
+            if (chatFeed) chatFeed.scrollTop = chatFeed.scrollHeight;
+        };
+
+        const initializeWebSocket = () => {
+            logSystemMessage("Linking up to live server matrix...");
+            socket = new WebSocket(SERVER_URL);
+
+            socket.onopen = () => {
+                logSystemMessage("Connected live to global chat streaming node!");
+                if (counterLabel) counterLabel.textContent = "Live online";
+            };
+
+            socket.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.room !== activeRoom) return;
+
+                    const messageBlock = document.createElement("div");
+                    messageBlock.className = `chat-message ${data.username === currentUsername ? 'self' : ''}`;
+                    messageBlock.innerHTML = `<strong>${data.username}</strong>: ${data.text}`;
+
+                    chatFeed?.appendChild(messageBlock);
+                    if (chatFeed) chatFeed.scrollTop = chatFeed.scrollHeight;
+                } catch (error) {
+                    console.error("Malformed transport packet architecture:", error);
+                }
+            };
+
+            socket.onclose = () => {
+                if (counterLabel) counterLabel.textContent = "Offline";
+                logSystemMessage("Server node connection severed. Re-engaging backend pipeline handshake in 5s...");
+                setTimeout(initializeWebSocket, 5000); 
+            };
+
+            socket.onerror = (err) => {
+                console.error("Pipeline engine error trap:", err);
+            };
+        };
+
+        chatForm?.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const rawText = chatInput?.value.trim();
+
+            if (!rawText) return;
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                logSystemMessage("Transmission failed. Pipeline server is currently reconnecting.");
+                return;
+            }
+
+            const dataPacket = {
+                username: currentUsername,
+                text: rawText,
+                room: activeRoom
+            };
+
+            socket.send(JSON.stringify(dataPacket));
+            if (chatInput) chatInput.value = ""; 
+        });
+
+        roomButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                roomButtons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                
+                activeRoom = btn.getAttribute("data-room") || "General";
+                if (chatFeed) chatFeed.innerHTML = ""; 
+                logSystemMessage(`Switched channel view to #${activeRoom}`);
+            });
+        });
+
+        initializeWebSocket();
+    });
+    </script>
 </body>
 </html>
