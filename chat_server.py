@@ -1,100 +1,64 @@
 import asyncio
 import json
-from collections import defaultdict
-
+import os
+import http.server
+import socketserver
+from threading import Thread
 import websockets
 
-ROOMS = {
-    "Minecraft": [],
-    "Forza Horizon 5": [],
-    "Halo Infinite": [],
-    "Sea of Thieves": [],
-}
+# --- Part 1: Real-Time Chat WebSocket Logic ---
+CONNECTED_PLAYERS = set()
 
-ROOM_SEED = {
-    "Minecraft": [
-        {"sender": "PixelPilot", "text": "The survival world is full tonight. Who wants to build a castle?"},
-        {"sender": "MaraForge", "text": "I am in. Let’s raid the village and prepare a redstone line."},
-    ],
-    "Forza Horizon 5": [
-        {"sender": "TurboRex", "text": "Neon night race is open. Show me your fastest lap."},
-        {"sender": "ApexByte", "text": "I am already on the desert route. It is pure speed."},
-    ],
-    "Halo Infinite": [
-        {"sender": "SquadCore", "text": "Drop in for ranked. We need a strong team."},
-        {"sender": "GhostDrift", "text": "I will take the flank and hold the objective."},
-    ],
-    "Sea of Thieves": [
-        {"sender": "CaptainMoss", "text": "Treasure is on the horizon. Keep an eye on the storm."},
-        {"sender": "NeonWave", "text": "I have the map. We are sailing straight into the next chest."},
-    ],
-}
-
-for room_name, messages in ROOM_SEED.items():
-    ROOMS[room_name] = list(messages)
-
-clients = {}
-
-
-def room_broadcast(room_name, payload):
-    for websocket, meta in list(clients.items()):
-        if meta.get("room") == room_name:
-            try:
-                asyncio.create_task(websocket.send(json.dumps(payload)))
-            except Exception:
-                pass
-
-
-async def handler(websocket):
-    connected = {"room": "Minecraft", "name": "Guest"}
-    clients[websocket] = connected
-
-    async def send_room_state(room_name):
-        await websocket.send(json.dumps({
-            "type": "sync",
-            "room": room_name,
-            "messages": ROOMS.get(room_name, [])
-        }))
-
-    await send_room_state("Minecraft")
-
+async def handle_chat(websocket):
+    CONNECTED_PLAYERS.add(websocket)
+    print(f"🎮 Player connected! Total active: {len(CONNECTED_PLAYERS)}")
     try:
-        async for raw in websocket:
-            try:
-                data = json.loads(raw)
-            except json.JSONDecodeError:
-                continue
-
-            message_type = data.get("type")
-            room_name = data.get("room", "Minecraft")
-            display_name = data.get("name", "Guest")
-
-            if message_type == "join":
-                clients[websocket]["room"] = room_name
-                clients[websocket]["name"] = display_name
-                await send_room_state(room_name)
-                continue
-
-            if message_type == "message":
-                text = (data.get("text") or "").strip()
-                if not text:
-                    continue
-                msg = {"sender": display_name, "text": text}
-                ROOMS.setdefault(room_name, []).append(msg)
-                room_broadcast(room_name, {
-                    "type": "message",
-                    "room": room_name,
-                    "message": msg,
-                })
+        async for message_data in websocket:
+            data = json.loads(message_data)
+            print(f"💬 [{data.get('room', 'General')}] {data.get('username')}: {data.get('text')}")
+            if CONNECTED_PLAYERS:
+                await asyncio.gather(*[player.send(message_data) for player in CONNECTED_PLAYERS])
+    except websockets.exceptions.ConnectionClosed:
+        pass
     finally:
-        clients.pop(websocket, None)
+        CONNECTED_PLAYERS.remove(websocket)
+        print(f"❌ Player disconnected. Total active: {len(CONNECTED_PLAYERS)}")
 
+# --- Part 2: Static Website File Delivery ---
+def start_static_web_server(port):
+    class MyHandler(http.server.SimpleHTTPRequestHandler):
+        def log_message(self, format, *args):
+            pass # Suppress heavy terminal logs for images/assets
 
-async def main():
-    async with websockets.serve(handler, "127.0.0.1", 8765):
-        print("PixelForge chat server running on ws://127.0.0.1:8765")
-        await asyncio.Future()
+    # Serve whatever folder this script is sitting in
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    
+    # Allow port reuse to prevent deployment crash loops
+    socketserver.TCPServer.allow_reuse_address = True
+    try:
+        with socketserver.TCPServer(("0.0.0.0", port), MyHandler) as httpd:
+            print(f"🌐 Website Front-End serving live on port {port}")
+            httpd.serve_forever()
+    except Exception as e:
+        print(f"Web server warning: {e}")
 
-
+# --- Part 3: Core Entry Point ---
 if __name__ == "__main__":
-    asyncio.run(main())
+    # Render passes one single port target via environment variables
+    PORT = int(os.environ.get("PORT", 10000))
+    
+    print("🚀 Initializing Unified PixelForge App Stack...")
+    
+    # Launch the website file server inside a separate background thread
+    web_thread = Thread(target=start_static_web_server, args=(PORT,), daemon=True)
+    web_thread.start()
+    
+    # Give the thread a split second to claim the port before the websocket loop checks in
+    import time
+    time.sleep(0.5)
+    
+    # Launch the WebSocket router inside the main async loop on the same port context
+    asyncio.run(websockets.serve(handle_chat, "0.0.0.0", PORT))
+    
+    # Keep the main process alive explicitly
+    asyncio.get_event_loop().run_forever()
