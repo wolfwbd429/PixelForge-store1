@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelForge Games | Contact</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="contact.css">
+    <link rel="icon" href="icon.png" type="image/x-icon">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html">PixelForge</a>
+        <nav class="site-nav">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="about.html">About</a>
+            <a class="active" href="contact.html">Contact</a>
+            <a href="auth.html">Account</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <p class="eyebrow">Contact</p>
+            <h1>We’d love to hear from you.</h1>
+            <p>Reach out with questions, feedback, or ideas for your next favorite game.</p>
+        </section>
+
+        <section class="contact-shell">
+            <div class="contact-card">
+                <h3>Get in touch</h3>
+                <p>Apata, Ibadan</p>
+                <p>hello@pixelforge.com</p>
+                <p><a href="https://wa.me/2348125625718" target="_blank" rel="noopener noreferrer">+234 812 562 5718</a></p>
+            </div>
+
+            <form class="contact-card contact-form">
+                <h3>Send a message</h3>
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" placeholder="Your name" required>
+
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="Your email" required>
+
+                <label for="phone">Phone Number</label>
+                <input id="phone" name="phone" type="tel" placeholder="Your phone number" required>
+
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" placeholder="Tell us what you need" required></textarea>
+
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        © <span id="year"></span> PixelForge. All rights reserved.
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

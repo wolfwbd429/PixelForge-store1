@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelForge Games | Account</title>
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html">PixelForge</a>
+        <nav class="site-nav">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a class="active" href="auth.html">Account</a>
+        </nav>
+    </header>
+
+    <main class="auth-page">
+        <section class="auth-card">
+            <p class="eyebrow">Sign in</p>
+            <h1>Join the PixelForge community</h1>
+            <p class="auth-copy">Use your Google or Microsoft account to access the game lobby with your real player identity.</p>
+
+            <div class="auth-buttons">
+                <button id="google-login" class="btn btn-primary" type="button">Continue with Google</button>
+                <button id="microsoft-login" class="btn btn-secondary" type="button">Continue with Microsoft</button>
+            </div>
+
+            <div id="auth-status" class="auth-status">Your account is not connected yet.</div>
+            <button id="signout-btn" class="btn btn-secondary auth-hidden" type="button">Sign out</button>
+        </section>
+    </main>
+
+    <footer>
+        © <span id="year"></span> PixelForge. All rights reserved.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

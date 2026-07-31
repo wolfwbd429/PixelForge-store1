@@ -1,0 +1,35 @@
+body {
+    overflow-x: hidden;
+}
+
+.about-page .panel {
+    min-height: 100%;
+}
+
+.about-page .intro,
+.about-page .story-block {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.about-page .intro img,
+.about-page .story-block img {
+    border-radius: 24px;
+    width: 100%;
+    min-height: 280px;
+    object-fit: cover;
+}
+
+.about-page .values {
+    margin-top: 1.3rem;
+}
+
+.about-page .value-card {
+    min-height: 180px;
+}
+
+.about-page .story-block {
+    margin-top: 1.4rem;
+}
+

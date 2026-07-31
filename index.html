@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelForge Games</title>
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html">PixelForge</a>
+        <label class="store-search" aria-label="Search games">
+            <input id="game-search" type="search" placeholder="Search apps, games, and more">
+        </label>
+        <nav class="site-nav">
+            <a class="active" href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="auth.html">Account</a>
+        </nav>
+    </header>
+
+    <main class="store-shell">
+        <aside class="store-sidebar">
+            <a class="sidebar-link active" href="index.html">Home</a>
+            <a class="sidebar-link" href="shop.html">Shop</a>
+            <a class="sidebar-link" href="about.html">About</a>
+            <a class="sidebar-link" href="contact.html">Contact</a>
+        </aside>
+
+        <section class="store-content">
+            <section class="store-hero">
+                <div class="store-hero-copy">
+                    <p class="eyebrow">Featured experience</p>
+                    <h1>Microsoft-style gaming storefront</h1>
+                    <p>Browse premium picks, hand-curated bundles, and exciting releases designed to feel like a polished digital app gallery.</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="shop.html">Shop games</a>
+                        <a class="btn btn-secondary" href="contact.html">Get in touch</a>
+                    </div>
+                </div>
+                <div class="store-hero-visual">
+                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80" alt="Gaming setup banner">
+                </div>
+            </section>
+
+            <section class="store-pills" id="genre-pills">
+                <button class="category-pill active" data-genre="all" type="button">Top picks</button>
+                <button class="category-pill" data-genre="Action" type="button">Action</button>
+                <button class="category-pill" data-genre="Racing" type="button">Racing</button>
+                <button class="category-pill" data-genre="Strategy" type="button">Strategy</button>
+                <button class="category-pill" data-genre="Adventure" type="button">Adventure</button>
+            </section>
+
+            <div class="catalog-toolbar">
+                <div class="results-count" id="results-count">Showing 100 games</div>
+                <div class="toolbar-controls">
+                    <label class="sort-control">
+                        <span>Sort by</span>
+                        <select id="sort-select">
+                            <option value="popular">Popular</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                        </select>
+                    </label>
+                    <button class="btn btn-secondary clear-filters" id="clear-filters" type="button">Clear filters</button>
+                </div>
+            </div>
+            <section class="store-grid" id="game-grid"></section>
+
+            <section class="info-panels">
+                <div class="panel">
+                    <p class="eyebrow">Why players love us</p>
+                    <h3>A place for discovery and excitement</h3>
+                    <p>We pair curated picks with streamlined discovery so every visit feels premium.</p>
+                </div>
+                <div class="panel">
+                    <p class="eyebrow">Fresh arrivals</p>
+                    <h3>New stories every week</h3>
+                    <p>Hand-picked titles, limited drops, and fan-favorite essentials arrive regularly.</p>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        © <span id="year"></span> PixelForge. All rights reserved.
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

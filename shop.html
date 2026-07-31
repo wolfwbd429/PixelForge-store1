@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelForge Games | Shop</title>
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html">PixelForge</a>
+        <label class="store-search" aria-label="Search games">
+            <input id="game-search" type="search" placeholder="Search apps, games, and more">
+        </label>
+        <nav class="site-nav">
+            <a href="index.html">Home</a>
+            <a class="active" href="shop.html">Shop</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="auth.html">Account</a>
+        </nav>
+    </header>
+
+    <main class="shop-page">
+        <section class="page-hero">
+            <p class="eyebrow">Shop</p>
+            <h1>Browse our growing catalog</h1>
+            <p>Pick from action-packed adventures, strategy challenges, and fast-paced racers that are ready to play.</p>
+        </section>
+
+        <section class="store-pills" id="genre-pills">
+            <button class="category-pill active" data-genre="all" type="button">New</button>
+            <button class="category-pill" data-genre="Adventure" type="button">Adventure</button>
+            <button class="category-pill" data-genre="Action" type="button">Action</button>
+            <button class="category-pill" data-genre="Racing" type="button">Racing</button>
+            <button class="category-pill" data-genre="Strategy" type="button">Strategy</button>
+        </section>
+
+        <section class="game-chat" id="chat-panel">
+            <div class="chat-panel-header">
+                <div>
+                    <p class="eyebrow">Community lobby</p>
+                    <h2>Game chat rooms</h2>
+                </div>
+                <span class="chat-online-label">120 online</span>
+            </div>
+            <div class="chat-layout">
+                <aside class="chat-rooms" id="chat-rooms"></aside>
+                <div class="chat-feed-wrap">
+                    <div class="chat-feed" id="chat-feed"></div>
+                    <form class="chat-composer" id="chat-form">
+                        <input id="chat-input" type="text" placeholder="Message the lobby..." maxlength="180">
+                        <button class="btn btn-primary" type="submit">Send</button>
+                    </form>
+                </div>
+                <aside class="chat-players" id="chat-players">
+                    <div class="player-card online">PixelPilot</div>
+                    <div class="player-card online">MaraForge</div>
+                    <div class="player-card online">ApexByte</div>
+                    <div class="player-card online">NeonWave</div>
+                    <div class="player-card">GhostDrift</div>
+                </aside>
+            </div>
+        </section>
+
+        <div class="catalog-toolbar">
+            <div class="results-count" id="results-count">Showing 100 games</div>
+            <div class="toolbar-controls">
+                <label class="sort-control">
+                    <span>Sort by</span>
+                    <select id="sort-select">
+                        <option value="popular">Popular</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                    </select>
+                </label>
+                <button class="btn btn-secondary clear-filters" id="clear-filters" type="button">Clear filters</button>
+            </div>
+        </div>
+        <section class="store-grid" id="game-grid"></section>
+
+        <section class="info-panels">
+            <div class="panel">
+                <p class="eyebrow">Free to try</p>
+                <h3>Sample a new favorite</h3>
+                <p>Every month we spotlight a free demo so you can test the gameplay before you commit to the full experience.</p>
+            </div>
+            <div class="panel">
+                <p class="eyebrow">Member perks</p>
+                <h3>Save more with every visit</h3>
+                <p>Members receive early access to drops, special bundles, and promotional pricing on selected titles.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        © <span id="year"></span> PixelForge. All rights reserved.
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

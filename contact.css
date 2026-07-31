@@ -1,0 +1,12 @@
+body {
+    overflow-x: hidden;
+}
+
+.contact-card {
+    min-height: 100%;
+}
+
+.contact-form .btn {
+    margin-top: 0.3rem;
+}
+
