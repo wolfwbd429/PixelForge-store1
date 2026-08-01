@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <!-- 👥 Custom Profile Username Setup Box (Revealed when Signed In) -->
+            <!-- 👥 Case B Solution: Custom Profile Elements Included to prevent DOM null binding errors -->
             <div id="profile-container" class="auth-hidden" style="margin-top: 1.5rem; background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
                 <h3 style="margin-top: 0; font-size: 1.2rem; color: #fff;">Set Your Player Tag</h3>
                 <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem;">Choose a unique username for the community chat lobbies.</p>
@@ -67,10 +67,10 @@
         © <span id="year"></span> PixelForge. All rights reserved.
     </footer>
 
-    <!-- 📚 1. Core Supabase JS SDK Infrastructure Library (MUST LOAD FIRST) -->
+    <!-- 📚 Case A Solution: Core Supabase SDK Library loads first into memory -->
     <script src="https://jsdelivr.net"></script>
 
-    <!-- 🛠️ 2. Custom Application Routing Script Engine Matrix -->
+    <!-- 🛠️ Your App Script loads second, avoiding 'supabase is not defined' crashes -->
     <script src="auth.js"></script>
 </body>
 </html>
